@@ -1,0 +1,44 @@
+name: CI - Build and Push Docker Image to ACR
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feature/*
+      - hotfix/*
+      - release/*
+
+jobs:
+
+  build-and-push:
+
+    runs-on: ubuntu-latest
+
+    env:
+      ACR_NAME: myacrkube
+      ACR_LOGIN_SERVER: myacrkube.azurecr.io
+      IMAGE_NAME: addtaskapi
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to Azure Container Registry
+        run: |
+          az acr login --name $ACR_NAME
+      - name: Set Build ID
+        run: |
+          echo "BUILD_ID=${{ github.run_number }}" >> $GITHUB_ENV
+      - name: Build Docker Image
+        run: |
+          docker build -t $ACR_LOGIN_SERVER/$IMAGE_NAME:$BUILD_ID .
+      - name: Push Docker Image
+        run: |
+          docker push $ACR_LOGIN_SERVER/$IMAGE_NAME:$BUILD_ID
