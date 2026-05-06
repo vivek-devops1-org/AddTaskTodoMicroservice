@@ -14,9 +14,6 @@ spec:
     spec:
       containers:
       - name: add-task
-        env:
-          - name: CONNECTION_STRING
-            value: "Driver={ODBC Driver 17 for SQL Server};Server=tcp:devopsinsiderssrv.database.windows.net,1433;Database=todoapp;Uid=devopsadmin;Pwd=P@ssw01rd@123;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;"
-        image: devopsinsiders/add-task
+        image: practice30.azurecr.io/addtask:v3
         ports:
         - containerPort: 8000
