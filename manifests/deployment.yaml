@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: add-task
+  name: add-task-deployment
 spec:
   replicas: 3
   selector:
@@ -9,11 +9,12 @@ spec:
       app: add-task
   template:
     metadata:
+      name: template-pod
       labels:
         app: add-task
     spec:
       containers:
-      - name: add-task
+      - name: add-task-container
         image: practice30.azurecr.io/addtask:v3
         ports:
         - containerPort: 8000
