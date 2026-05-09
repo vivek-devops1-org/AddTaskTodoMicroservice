@@ -65,6 +65,6 @@ jobs:
 
           git add manifests/deployment.yaml
 
-          git commit -m "Update image to ${{ env.VERSION }}" || echo "No changes"
+          git commit -m "Update image to ${{ env.VERSION }}"
 
           git push
