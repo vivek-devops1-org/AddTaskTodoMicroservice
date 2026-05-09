@@ -41,11 +41,19 @@ jobs:
       # Update deployment.yaml
       # ---------------------------------
       - name: Update Kubernetes Manifest
+        shell: powershell
         run: |
-          sed -i 's|image:.*|image: '${{ secrets.ACR_LOGIN_SERVER }}'/'${{ env.IMAGE_NAME }}':'${{ env.VERSION }}'|g' manifests/deployment.yaml
-
-          echo "Updated deployment.yaml"
-          cat manifests/deployment.yaml
+          $file = "manifests/deployment.yaml"
+      
+          $newImage = "${{ secrets.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}"
+      
+          (Get-Content $file) `
+            -replace 'image:.*', "image: $newImage" |
+            Set-Content $file
+      
+          Write-Host "Updated deployment.yaml"
+      
+          Get-Content $file
 
       # ---------------------------------
       # Commit changes back
