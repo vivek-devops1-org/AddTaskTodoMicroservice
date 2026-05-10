@@ -2,7 +2,7 @@ name: Build and Push to ACR
 on: workflow_dispatch
 env:
   IMAGE_NAME: addtask
-  VERSION: v${{ github.run_number }}
+  VERSION: ${{ github.run_number }}
   CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
