@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: add-task-container
-        image: practice30.azurecr.io/addtask:v7
+        image: practice30.azurecr.io/addtask:v6
         ports:
         - containerPort: 8000
