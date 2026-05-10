@@ -14,7 +14,7 @@ jobs:
     runs-on: self-hosted
     permissions:
       id-token: write
-      contents: read
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.2
@@ -37,3 +37,34 @@ jobs:
 
       - name: Push Docker image
         run: docker push ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+      # ---------------------------------
+      # Update deployment.yaml
+      # ---------------------------------
+      - name: Update Kubernetes Manifest
+        shell: powershell
+        run: |
+          $file = "manifests/deployment.yaml"
+      
+          $newImage = "${{ secrets.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}"
+      
+          (Get-Content $file) `
+            -replace 'image:.*', "image: $newImage" |
+            Set-Content $file
+      
+          Write-Host "Updated deployment.yaml"
+      
+          Get-Content $file
+
+      # ---------------------------------
+      # Commit changes back
+      # ---------------------------------
+      - name: Commit and Push Changes
+        run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "github-actions"
+
+          git add manifests/deployment.yaml
+
+          git commit -m "Update image to ${{ env.VERSION }}"
+
+          git push
