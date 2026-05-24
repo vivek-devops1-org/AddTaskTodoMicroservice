@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: configure-ingress-addtask
+  labels:
+    app.kubernetes.io/name: myingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: add-task.kulphi.shop
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: add-task-service #service name mean Loadbalancer service ka naam, yha cluster ip type LB ko add kar rahe
+            port: 
+              number: 80 #service ka portnumber
